@@ -12,30 +12,33 @@ const (
 	staticDir = "static"
 )
 
-func rootHandler(w http.ResponseWriter, r *http.Request) {
-	t, err := template.ParseFiles("tmpl/hello.html")
-	if err != nil {
-		panic(err)
-	}
+var (
+	t *template.Template
+)
+
+func indexHandler(w http.ResponseWriter, r *http.Request) {
 
 	data := struct {
 		Name string
 	}{"John Smith"}
 
-	t.Execute(w, data)
+	t.ExecuteTemplate(w, "index", data)
 }
 
-func testHandler(w http.ResponseWriter, r *http.Request) {
-	t, err := template.ParseFiles("tmpl/test.html")
-	if err != nil {
-		panic(err)
-	}
-
+func thingsHandler(w http.ResponseWriter, r *http.Request) {
 	data := struct {
 		Name string
 	}{"John Smith"}
 
-	t.Execute(w, data)
+	t.ExecuteTemplate(w, "things", data)
+}
+
+func channelsHandler(w http.ResponseWriter, r *http.Request) {
+	data := struct {
+		Name string
+	}{"John Smith"}
+
+	t.ExecuteTemplate(w, "channels", data)
 }
 
 func main() {
@@ -44,13 +47,18 @@ func main() {
 
 	// Serve static files
 	fs := http.FileServer(http.Dir(staticDir))
-	r.Get("/*", func(w http.ResponseWriter, r *http.Request) {
-		fs.ServeHTTP(w, r)
-	})
+	r.Handle("/*", fs)
 
 	// Routes
-	r.Get("/", rootHandler)
-	r.Get("/test", testHandler)
+	r.Get("/", indexHandler)
+	r.Get("/things", thingsHandler)
+	r.Get("/channels", channelsHandler)
+
+	var err error
+	t, err = template.ParseGlob("views/*")
+	if err != nil {
+		panic(err)
+	}
 
 	http.ListenAndServe(":3000", r)
 }
