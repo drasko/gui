@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	staticDir = "static"
+	staticDir = "gui/static"
 )
 
 var (
@@ -55,7 +55,7 @@ func main() {
 	r.Get("/channels", channelsHandler)
 
 	var err error
-	t, err = template.ParseGlob("views/*")
+	t, err = template.ParseGlob("gui/views/*")
 	if err != nil {
 		panic(err)
 	}

@@ -1,0 +1,3 @@
+FROM scratch
+COPY gui /exe
+ENTRYPOINT ["/exe"]
