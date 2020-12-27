@@ -1,3 +1,4 @@
+SVC = gui
 BUILD_DIR = build
 CGO_ENABLED ?= 0
 GOOS ?= linux
@@ -14,9 +15,9 @@ define make_docker_dev
 	docker build --tag=drasko/$(subst docker_dev_,,$(1)) -f docker/Dockerfile.dev ./build
 endef
 
-all: gui
+all: ${SVC}
 
-.PHONY: gui dockers dockers_dev
+.PHONY: ${SVC} dockers dockers_dev
 
 clean:
 	rm -rf ${BUILD_DIR}
@@ -27,7 +28,7 @@ install:
 test:
 	GOCACHE=off go test -v -race -tags test $(shell go list ./... | grep -v 'vendor\|cmd')
 
-gui:
+${SVC}:
 	$(call compile_service,$(@))
 
 docker:
@@ -37,4 +38,4 @@ docker_dev:
 	$(call make_docker_dev,$(@))
 
 run:
-	cd scripts && ./run.sh
+	${BUILD_DIR}/${SVC}

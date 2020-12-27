@@ -22,6 +22,10 @@ import (
 	"google.golang.org/grpc/status"
 )
 
+const (
+	contentType = "text/html"
+)
+
 var (
 	errMalformedData     = errors.New("malformed request data")
 	errMalformedSubtopic = errors.New("malformed subtopic")
@@ -96,8 +100,23 @@ func decodePayload(body io.ReadCloser) ([]byte, error) {
 }
 
 func encodeResponse(_ context.Context, w http.ResponseWriter, response interface{}) error {
-	w.WriteHeader(http.StatusAccepted)
-	return nil
+	w.Header().Set("Content-Type", contentType)
+	ar, ok := response.(guiRes)
+	if !ok {
+		w.WriteHeader(http.StatusInternalServerError)
+		return nil
+	}
+
+	for k, v := range ar.Headers() {
+		w.Header().Set(k, v)
+	}
+	w.WriteHeader(ar.Code())
+
+	if ar.Empty() {
+		return nil
+	}
+
+	return ar.template.ExecuteTemplate(w, ar.name, ar.data)
 }
 
 func encodeError(_ context.Context, err error, w http.ResponseWriter) {

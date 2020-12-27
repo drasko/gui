@@ -30,10 +30,10 @@ import (
 )
 
 const (
-	defLogLevel          = "error"
+	defLogLevel          = "info"
 	defClientTLS         = "false"
 	defCACerts           = ""
-	defPort              = "8180"
+	defPort              = "9090"
 	defJaegerURL         = ""
 	defThingsAuthURL     = "localhost:8181"
 	defThingsAuthTimeout = "1s"
@@ -42,14 +42,12 @@ const (
 	envClientTLS         = "MF_GUI_CLIENT_TLS"
 	envCACerts           = "MF_GUI_CA_CERTS"
 	envPort              = "MF_GUI_PORT"
-	envNatsURL           = "MF_NATS_URL"
 	envJaegerURL         = "MF_JAEGER_URL"
 	envThingsAuthURL     = "MF_THINGS_AUTH_GRPC_URL"
 	envThingsAuthTimeout = "MF_THINGS_AUTH_GRPC_TIMEOUT"
 )
 
 type config struct {
-	natsURL           string
 	logLevel          string
 	port              string
 	clientTLS         bool
