@@ -24,6 +24,7 @@ import (
 
 const (
 	contentType = "text/html"
+	staticDir   = "web/static"
 )
 
 var (
@@ -61,6 +62,10 @@ func MakeHandler(svc gui.Service, tracer opentracing.Tracer) http.Handler {
 
 	r.GetFunc("/version", mainflux.Version("gui"))
 	r.Handle("/metrics", promhttp.Handler())
+
+	// Static file handler
+	fs := http.FileServer(http.Dir(staticDir))
+	r.Handle("/*", fs)
 
 	return r
 }
