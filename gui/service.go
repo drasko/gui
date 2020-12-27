@@ -49,8 +49,10 @@ func (gs *guiService) Index(ctx context.Context, token string) (TemplateData, er
 	}
 
 	data := struct {
-		Name string
-	}{"John Smith"}
+		NavbarActive string
+	}{
+		"dashboard",
+	}
 
 	return TemplateData{
 		Template: tmpl,
@@ -66,8 +68,10 @@ func (gs *guiService) Things(ctx context.Context, token string) (TemplateData, e
 	}
 
 	data := struct {
-		Name string
-	}{"John Smith"}
+		NavbarActive string
+	}{
+		"things",
+	}
 
 	return TemplateData{
 		Template: tmpl,
@@ -83,8 +87,10 @@ func (gs *guiService) Channels(ctx context.Context, token string) (TemplateData,
 	}
 
 	data := struct {
-		Name string
-	}{"John Smith"}
+		NavbarActive string
+	}{
+		"channels",
+	}
 
 	return TemplateData{
 		Template: tmpl,
